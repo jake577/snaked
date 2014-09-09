@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Snaked</string>
+    <string name="game_problem">Error encountered: Ending game</string>
+    <string name="network_problem">Error encountered: Check internet connection</string>
+    <string name="is_inviting_you">has invited you to a game</string>
+    
+</resources>

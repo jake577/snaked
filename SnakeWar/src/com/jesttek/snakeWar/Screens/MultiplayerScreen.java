@@ -18,6 +18,7 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -213,10 +214,12 @@ public class MultiplayerScreen implements Screen, IMoveReceiver{
 			public boolean touchUp (int x, int y, int pointer, int button) {
 				if(SnakeWarGame.SaveController.getControlType() == ControlType.Tap) {
 					if(!mGameOver && (mGameStartCountdown <= 0)) {
+						Vector3 touch = new Vector3();
+						mStage.getCamera().unproject(touch.set(x, y, 0)); 
 						Direction direction = mSnakeLocal.getDirection();
 						if(direction == Direction.UP || direction == Direction.DOWN) {
 							//moving vertically
-							if(x > SnakeWarGame.VIRTUAL_WIDTH/2) {
+							if(touch.x > 0) {
 								mSnakeLocal.setDirection(Direction.RIGHT);
 							}
 							else {
@@ -225,7 +228,7 @@ public class MultiplayerScreen implements Screen, IMoveReceiver{
 						} 
 						else {
 							//moving horizontally
-							if(y > SnakeWarGame.VIRTUAL_HEIGHT/2) {		
+							if(touch.y < 0) {		
 								mSnakeLocal.setDirection(Direction.DOWN);
 							}
 							else {

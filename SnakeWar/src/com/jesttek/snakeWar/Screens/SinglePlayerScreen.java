@@ -16,6 +16,7 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -26,11 +27,11 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.jesttek.snakeWar.Coordinate;
 import com.jesttek.snakeWar.Particle;
 import com.jesttek.snakeWar.Powerup;
-import com.jesttek.snakeWar.TextUtil;
 import com.jesttek.snakeWar.Powerup.PowerupType;
 import com.jesttek.snakeWar.Snake;
 import com.jesttek.snakeWar.Snake.Direction;
 import com.jesttek.snakeWar.SnakeWarGame;
+import com.jesttek.snakeWar.TextUtil;
 import com.jesttek.snakeWar.Controls.PausePopup;
 import com.jesttek.snakeWar.Controls.ShaderLabel;
 import com.jesttek.snakeWar.Controls.SinglePlayerEndPopup;
@@ -229,10 +230,12 @@ public class SinglePlayerScreen implements Screen{
 			public boolean touchUp (int x, int y, int pointer, int button) {
 				if(SnakeWarGame.SaveController.getControlType() == ControlType.Tap) {
 					if(!mGameOver && (mGameStartCountdown <= 0)) {
+						Vector3 touch = new Vector3();
+						mStage.getCamera().unproject(touch.set(x, y, 0)); 
 						Direction direction = mSnake.getDirection();
 						if(direction == Direction.UP || direction == Direction.DOWN) {
 							//moving vertically
-							if(x > SnakeWarGame.VIRTUAL_WIDTH/2) {
+							if(touch.x > 0) {
 								mSnake.setDirection(Direction.RIGHT);
 							}
 							else {
@@ -241,7 +244,7 @@ public class SinglePlayerScreen implements Screen{
 						} 
 						else {
 							//moving horizontally
-							if(y > SnakeWarGame.VIRTUAL_HEIGHT/2) {		
+							if(touch.y < 0) {		
 								mSnake.setDirection(Direction.DOWN);
 							}
 							else {

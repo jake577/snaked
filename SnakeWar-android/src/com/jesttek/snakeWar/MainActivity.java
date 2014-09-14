@@ -39,7 +39,6 @@ import com.google.example.games.basegameutils.GameHelper;
 import com.google.example.games.basegameutils.GameHelper.GameHelperListener;
 import com.jesttek.snakeWar.Inferfaces.IMoveReceiver;
 import com.jesttek.snakeWar.Inferfaces.IPlayServices;
-import com.jesttek.snakeWarAutomated.SnakeWarGame;
 
 public class MainActivity extends AndroidApplication implements IPlayServices, GameHelperListener, RoomUpdateListener, ReliableMessageSentCallback, RealTimeMessageReceivedListener, RoomStatusUpdateListener, OnInvitationReceivedListener {
 

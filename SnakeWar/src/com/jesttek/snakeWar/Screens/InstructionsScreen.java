@@ -555,38 +555,54 @@ public class InstructionsScreen implements Screen{
 		}
 		
 		//with obstacles
+		Coordinate lastTurn = mSnake.getSnakePoint(1);
 		for(int i = 0 ; i < mObstacles.size(); i++) {
 			Rectangle r = mObstacles.get(i);
-			if((head.X >= r.x && head.X <= r.x+r.width) &&(head.Y >= r.y && head.Y <= r.y+r.height)) {
+			if((head.X > r.x && head.X < r.x+r.width) && (head.Y > r.y && head.Y < r.y+r.height)) {
 				mBeingAttacked = true;
 				float damage = 1;
+				//damage = area removed
 				switch(mSnake.getDirection()) {
 					case LEFT:
-						r.width = mSnake.getHeadPosition().X - r.x;
-						damage = r.height/4;
+						damage = ((r.x+r.width)-head.X)*r.height;
+						r.width = head.X - r.x;
 						break;
 					case RIGHT:
-						r.width = (r.x+r.width) - mSnake.getHeadPosition().X;
-						r.x = mSnake.getHeadPosition().X;
-						damage = r.height/4;
+						damage = (head.X-r.x)*r.height;
+						r.width = (r.x+r.width) - head.X;
+						r.x = head.X;
 						break;
 					case UP:
-						r.height = (r.y+r.height) - mSnake.getHeadPosition().Y;
-						r.y = mSnake.getHeadPosition().Y;	
-						damage = r.width/4;					
+						damage = (head.Y-r.y)*r.width;		
+						r.height = (r.y+r.height) - head.Y;
+						r.y = head.Y;				
 						break;
 					case DOWN:
-						r.height = mSnake.getHeadPosition().Y - r.y;
-						damage = r.width/4;					
+						damage = ((r.y+r.height)-head.Y)*r.width;
+						r.height = head.Y - r.y;					
 						break;
 				}
 				mSnake.decreaseTimeRemaining(delta*damage);
-				if((r.height <= 3) || (r.width <= 3)) {
-					mObstacles.remove(i);
-					i--;
-				}
 			}
-		}
+			else {
+				//check if we "jumped" an obstacle (moving too fast to hit it)
+				if(head.Y > r.y && head.Y < r.y + r.height-0.01) {
+					if(((head.X > r.x) && (lastTurn.X < r.x)) || 
+						((head.X < r.x) && (lastTurn.X > r.x))) {
+						mObstacles.remove(i);
+						i--;	
+					}	
+				}
+
+				if(head.X > r.x && head.X < r.x + r.width-0.01) {
+					if(((head.Y > r.y) && (lastTurn.Y < r.y)) || 
+						((head.Y < r.y) && (lastTurn.Y > r.y))) {
+						mObstacles.remove(i);
+						i--;			
+					}
+				}
+			}			
+		}	
 		return false;
 	}
 

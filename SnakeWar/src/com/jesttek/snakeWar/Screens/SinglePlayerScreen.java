@@ -90,6 +90,7 @@ public class SinglePlayerScreen implements Screen{
 		mStage.getCamera().position.y = 0;
 		setupLayout();
 		setupControls();	
+		resetGame();
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 	}
 	
@@ -110,11 +111,10 @@ public class SinglePlayerScreen implements Screen{
 		mParticles.clear();
 		mEnemies.clear();
 		mObstacles.clear();
-		mSnake = new Snake(new Coordinate(0,-50), new Coordinate(0,-150), Direction.UP, 150);
+		mSnake = new Snake(new Coordinate(0,-50), new Coordinate(0,-150), Direction.UP, 170);
 		mPowerups[POWERUP_LENGTH] = new Powerup(new Coordinate(-150,-POWERUP_SIZE), PowerupType.IncreaseLength);
 		mPowerups[POWERUP_SPEED] = new Powerup(new Coordinate(150,0-POWERUP_SIZE), PowerupType.IncreaseSpeed);
 		mPowerups[POWERUP_TIME] = new Powerup(new Coordinate(0,150-POWERUP_SIZE), PowerupType.IncreaseTime);	
-		mGameOverPopup.dropOut();
 		mStartCountdownLabel.setColor(1, 1, 1, 1);
 		mStage.addActor(mStartCountdownLabel);
 	}
@@ -143,6 +143,7 @@ public class SinglePlayerScreen implements Screen{
             public void clicked(InputEvent event, float x, float y ) {       
 				SnakeWarGame.SoundPlayer.playButtonClick();
 				resetGame();
+				mGameOverPopup.dropOut();
             }
 		},
         new ClickListener() {				
@@ -154,10 +155,6 @@ public class SinglePlayerScreen implements Screen{
             }
 		});	
 		mStage.addActor(mGameOverPopup);
-		mSnake = new Snake(new Coordinate(0,-50), new Coordinate(0,-150), Direction.UP, 150);
-		mPowerups[POWERUP_LENGTH] = new Powerup(new Coordinate(-150,-POWERUP_SIZE), PowerupType.IncreaseLength);
-		mPowerups[POWERUP_SPEED] = new Powerup(new Coordinate(150,0-POWERUP_SIZE), PowerupType.IncreaseSpeed);
-		mPowerups[POWERUP_TIME] = new Powerup(new Coordinate(0,150-POWERUP_SIZE), PowerupType.IncreaseTime);
 		
 		LabelStyle ls = new LabelStyle();
 		ls.font = SnakeWarGame.GameFont.Font;

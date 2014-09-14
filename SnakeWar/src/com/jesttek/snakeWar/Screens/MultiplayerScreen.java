@@ -515,32 +515,38 @@ public class MultiplayerScreen implements Screen, IMoveReceiver{
 	 * @return true if the countdown is complete
 	 */
 	private boolean doCountdown(float delta) {
-		if(mGameStartCountdown <= 0) {	
-			if(mGameStartCountdown > -1) {	
-				mCountdownLabel.setText("GO");
-				mGameStartCountdown -= delta;
-				mCountdownLabel.setFontScale(-mGameStartCountdown*2);
-				float fade = 1+mGameStartCountdown;
-				mCountdownLabel.setColor(fade, fade, fade, fade);
-			} 
-			else {
-				mCountdownLabel.remove();
+		if(mReady) {
+			if(mGameStartCountdown <= 0) {	
+				if(mGameStartCountdown > -1) {	
+					mCountdownLabel.setText("GO");
+					mGameStartCountdown -= delta;
+					mCountdownLabel.setFontScale(-mGameStartCountdown*2);
+					float fade = 1+mGameStartCountdown;
+					mCountdownLabel.setColor(fade, fade, fade, fade);
+				} 
+				else {
+					mCountdownLabel.remove();
+				}
+				return true;			
 			}
-			return true;			
+			else {
+				int last = (int)(mGameStartCountdown+1); //add 1 to avoid same values for positive 0 and negative 0.
+				mGameStartCountdown -= delta;
+				if(last != (int)(mGameStartCountdown+1)) {
+					SnakeWarGame.SoundPlayer.playCountdownTone((int)(mGameStartCountdown+1));
+				}
+				if(mGameStartCountdown > 3) {
+					mCountdownLabel.setText("GET READY");					
+				} 
+				else {
+					mCountdownLabel.setText(((int)mGameStartCountdown+1) + "");
+					mCountdownLabel.setFontScale((1-(mGameStartCountdown-(int)mGameStartCountdown))*2);
+				}
+				return false;
+			}
 		}
 		else {
-			int last = (int)(mGameStartCountdown+1); //add 1 to avoid same values for positive 0 and negative 0.
-			mGameStartCountdown -= delta;
-			if(last != (int)(mGameStartCountdown+1)) {
-				SnakeWarGame.SoundPlayer.playCountdownTone((int)(mGameStartCountdown+1));
-			}
-			if(mGameStartCountdown > 3) {
-				mCountdownLabel.setText("READY");					
-			} 
-			else {
-				mCountdownLabel.setText(((int)mGameStartCountdown+1) + "");
-				mCountdownLabel.setFontScale((1-(mGameStartCountdown-(int)mGameStartCountdown))*2);
-			}
+			mCountdownLabel.setText("GET READY");
 			return false;
 		}
 	}

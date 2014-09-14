@@ -582,7 +582,7 @@ public class InstructionsScreen implements Screen{
 						r.height = head.Y - r.y;					
 						break;
 				}
-				mSnake.decreaseTimeRemaining(delta*damage);
+				mSnake.decreaseTimeRemaining(delta*damage/10);
 			}
 			else {
 				//check if we "jumped" an obstacle (moving too fast to hit it)

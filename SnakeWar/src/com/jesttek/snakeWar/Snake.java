@@ -2,6 +2,7 @@ package com.jesttek.snakeWar;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -120,6 +121,7 @@ public class Snake {
 	}
 	
 	public void draw(ShapeRenderer shapeRenderer) {
+		Gdx.gl20.glLineWidth(4);
 		shapeRenderer.begin(ShapeType.Line);
 		shapeRenderer.setColor(Color.PINK);
 		for(int i = 1; i < mTurnPoints.size(); i+=1)
@@ -129,6 +131,7 @@ public class Snake {
 			shapeRenderer.line(c1.X, c1.Y,c2.X, c2.Y);		
 		}	
 		shapeRenderer.end();	
+		Gdx.gl20.glLineWidth(2);
 	}
 	
 	/**

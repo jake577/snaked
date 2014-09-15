@@ -121,7 +121,11 @@ public class Powerup {
 		case IncreaseSpeed:
 			player.setSpeed(player.getSpeed()+10);
 			break;
-		case IncreaseTime:
+		case IncreaseTime:			
+			break;
+		case IncreaseOpponentSpeed:
+			break;
+		default:
 			break;
 		}
 	}

@@ -93,7 +93,7 @@ public class ShaderTextButton extends Button {
 		return label;
 	}
 
-	public Cell getLabelCell () {
+	public Cell<ShaderLabel> getLabelCell () {
 		return getCell(label);
 	}
 

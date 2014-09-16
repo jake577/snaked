@@ -199,33 +199,33 @@ public class MainActivity extends AndroidApplication implements IPlayServices, G
 		mHelper.onActivityResult(requestCode, responseCode, intent);	
 
         switch (requestCode) {
-            case RC_SELECT_PLAYERS:
-                // we got the result from the "select players" UI -- ready to create the room
-                handleSelectPlayersResult(responseCode, intent);
-                break;
-            case RC_INVITATION_INBOX:
-                // we got the result from the "select invitation" UI (invitation inbox). We're
-                // ready to accept the selected invitation:
-                handleInvitationInboxResult(responseCode, intent);
-                break;
-            case RC_WAITING_ROOM:
-                // we got the result from the "waiting room" UI.
-                if (responseCode == Activity.RESULT_OK) {
-                    // ready to start playing
-            		Gdx.app.postRunnable(new Runnable() {
-            			@Override
-            			public void run() {
-            		        startGame(true);
-            			}
-            		});
-                } else if (responseCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
-                    // player indicated that they want to leave the room
-                    leaveRoom();
-                } else if (responseCode == Activity.RESULT_CANCELED) {
-                    // Dialog was cancelled (user pressed back key, for instance).
-                    leaveRoom();
-                }
-                break;
+        case RC_SELECT_PLAYERS:
+            // we got the result from the "select players" UI -- ready to create the room
+            handleSelectPlayersResult(responseCode, intent);
+            break;
+        case RC_INVITATION_INBOX:
+            // we got the result from the "select invitation" UI (invitation inbox). We're
+            // ready to accept the selected invitation:
+            handleInvitationInboxResult(responseCode, intent);
+            break;
+        case RC_WAITING_ROOM:
+            // we got the result from the "waiting room" UI.
+            if (responseCode == Activity.RESULT_OK) {
+                // ready to start playing
+        		Gdx.app.postRunnable(new Runnable() {
+        			@Override
+        			public void run() {
+        		        startGame(true);
+        			}
+        		});
+            } else if (responseCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
+                // player indicated that they want to leave the room
+                leaveRoom();
+            } else if (responseCode == Activity.RESULT_CANCELED) {
+                // Dialog was cancelled (user pressed back key, for instance).
+                leaveRoom();
+            }
+            break;
         }
     }
 	
@@ -550,33 +550,35 @@ public class MainActivity extends AndroidApplication implements IPlayServices, G
 	public void onRealTimeMessageReceived(RealTimeMessage arg0) {
 		byte[] message = arg0.getMessageData();
 		int messageType = message[0];
-		switch(messageType)
-		{
-			case IMoveReceiver.MSG_GAME:	
-				mMoveReceiver.receiveMove(message);
-				break;
-			case IMoveReceiver.MSG_READY:
-				mOpponentReady = true;
-				if(!mHosting && mMoveReceiver != null && mMoveReceiver.isReady())
-				{
-	    			byte[] msgStart = {IMoveReceiver.MSG_REQUEST_START};
-	    			mPingTimer = new Date();
-	    			broadcastMessage(msgStart);
-				}
-				break;
-			case IMoveReceiver.MSG_REQUEST_START:
-				mMoveReceiver.gameStart(5);
-				byte[] msgStart = {IMoveReceiver.MSG_STARTING};
-				broadcastMessage(msgStart);					
-				break;
-			case IMoveReceiver.MSG_STARTING:	
-				Date now = new Date();
-				float latency = (float)(now.getTime() - mPingTimer.getTime());
-				float countdown = 5f - latency/2000;
-				mMoveReceiver.gameStart(countdown);
-				break;
-			default:
-				break;
+		if(mMoveReceiver != null) {
+			switch(messageType)
+			{
+				case IMoveReceiver.MSG_GAME:	
+					mMoveReceiver.receiveMove(message);
+					break;
+				case IMoveReceiver.MSG_READY:
+					mOpponentReady = true;
+					if(!mHosting && mMoveReceiver != null && mMoveReceiver.isReady())
+					{
+		    			byte[] msgStart = {IMoveReceiver.MSG_REQUEST_START};
+		    			mPingTimer = new Date();
+		    			broadcastMessage(msgStart);
+					}
+					break;
+				case IMoveReceiver.MSG_REQUEST_START:
+					mMoveReceiver.gameStart(5);
+					byte[] msgStart = {IMoveReceiver.MSG_STARTING};
+					broadcastMessage(msgStart);					
+					break;
+				case IMoveReceiver.MSG_STARTING:	
+					Date now = new Date();
+					float latency = (float)(now.getTime() - mPingTimer.getTime());
+					float countdown = 5f - latency/2000;
+					mMoveReceiver.gameStart(countdown);
+					break;
+				default:
+					break;
+			}
 		}
 	}
 	
